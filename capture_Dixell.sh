@@ -18,7 +18,7 @@ while true; do
 
   # sniffing data from arrived from $IP using tshark command
   tshark -V -i $INTERFACE -Y "ip.addr==$IP and http.response.line" -F k12text -a duration:$CAPTURETIME | while read -r; do
-    # Find line what start with '    2' or [3456789]
+    # Find line what start with '    2' or [3456789] and the trim spaces and delete chars '\n'
     grep '^    [23456789]' | tr -d ' ' | sed 's/[\]n//g'
   done | while IFS="|" read -r VAL_1 VAL_2 VAL_3 VAL_4 VAL_5 VAL_6 VAL_7 VAL_8 VAL_9 VAL_10 VAL_11 VAL_12 VAL_13 VAL_14 VAL_15 VAL_16 VAL_17 VAL_18 VAL_19; do
     # First values is address for controller connected at XWeb300D RS485 serial line
