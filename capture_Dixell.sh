@@ -6,7 +6,8 @@ PSQL="psql -X --username=monitoruser --dbname=monitor --no-align --tuples-only -
 # Some constants
 # IP address for Dixell XWeb300D
 IP='192.168.0.15'
-# Time in seconds, how long we captured packets using tshark command
+# Time in seconds, how long we captured packets using tshark command. We used 15 seconds because the client request at
+# every approximate 15 seconds data from server to fill the form
 CAPTURETIME=15
 # Interface used for captures packages
 INTERFACE=tun0
@@ -16,10 +17,11 @@ while true; do
   # Put current date as dd-mm-YYYY HH:MM:SS in $DATETIME, in sql insert can be used also now() for datetime
   DATETIME=$(date '+%d-%m-%Y %H:%M:%S')
 
-  # sniffing data from arrived from $IP using tshark command
+  # Sniffing packages arrived from $IP, at $INTERFACE, using tshark command
   tshark -V -i $INTERFACE -Y "ip.addr==$IP and http.response.line" -F k12text -a duration:$CAPTURETIME | while read -r; do
     # Find line what start with '    2' or [3456789] and the trim spaces and delete chars '\n'
     grep '^    [23456789]' | tr -d ' ' | sed 's/[\]n//g'
+    # After that set Internal Field Separator (IFS) for char '|',read line by line and put values into variables
   done | while IFS="|" read -r VAL_1 VAL_2 VAL_3 VAL_4 VAL_5 VAL_6 VAL_7 VAL_8 VAL_9 VAL_10 VAL_11 VAL_12 VAL_13 VAL_14 VAL_15 VAL_16 VAL_17 VAL_18 VAL_19; do
     # First values is address for controller connected at XWeb300D RS485 serial line
     ADDRESS=$VAL_1
