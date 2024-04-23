@@ -37,7 +37,7 @@ this lines we need to construct our sql insert command to our TimescaleDB databa
 
 ![Screen shoot with command tshark running](./img/capture_with_tshark.png)
 
-Later we used this database in TimescaleDB (extension under PostgreSQL) where we needed, me I used into Grafana server.  
+Later we used this, the database in TimescaleDB (extension under PostgreSQL), where we needed, for example I used into Grafana server.  
 
 >**Warning**  
 > The script work only if the page where is sent the request exist and the web browser page is not closed  
