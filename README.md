@@ -2,8 +2,10 @@
 Because I have necessary to save parameters readings by Dixell XWEB300D, it's a monitoring and control device for Dixell controllers
 like XC60CX or/and XL260L, into time series database TimescaleDB I used a technique named sniffing to capture the
 packages between the client and the server.  
+  
 Http server is running into Dixell XWEB300D devices. In menu application we have a runtime pages where we add all devices
 monitoring and controlled by XWEB300D.  
+  
 First we start runtime page from server using web browser (client) and then we capture the packages arrived into our network 
 interface. After that we start in console the sniffer tshark (is necessary to be installed before, with command
 ```sudo apt install tshark``` for ubuntu systems) with command:  
@@ -12,6 +14,7 @@ tshark -V -i tun0 -Y "ip.addr==192.168.0.15 and http.response.line" -F k12text
 ```
 in my case the interface is tun0 because I used a vpn connection and 192.168.0.15 is ip address for XWEB300D device 
 where is run https server. For easy readings we leave to run only the page with runtime from XWEB300D device in browser.  
+  
 The tshark command is filtered for our ip, and only we catch response line, after that the output is formated for k12text (text).  
 Because the runtime pages send request at every approximate 15 seconds to fill the form we after this time catch the lines 
 needed:  
@@ -34,7 +37,7 @@ this lines we need to construct our sql insert command to our TimescaleDB databa
 
 ![Screen shoot with command tshark running](./img/capture_with_tshark.png)
 
-Later we used this database in TimescaleDB (extension under PostgreSQL) where we needed, me I used into Grafana server.  
+Later we used this, the database in TimescaleDB (extension under PostgreSQL), where we needed, for example I used into Grafana server.  
 
 >**Warning**  
 > The script work only if the page where is sent the request exist and the web browser page is not closed  
